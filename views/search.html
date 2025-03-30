@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar Juego por ID</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    main {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    input, button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      border: none;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    img {
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #resultado p {
+      text-align: left;
+      background-color: #e9f7ef;
+      border-left: 4px solid #28a745;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    #resultado img {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .error {
+      color: red;
+      background-color: #fdecea;
+      border-left: 4px solid #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Buscar Juego por ID</h1>
+    <a href="index.html">Volver al Inicio</a>
+
+    <h2>Ingrese el ID del Juego</h2>
+    <input type="text" id="juegoId" placeholder="Ingrese el ID del Juego" />
+    <button onclick="buscarJuego()">Buscar Juego</button>
+    <div id="resultado"></div>
+  </main>
+
+  <script>
+    async function buscarJuego() {
+      const id = document.getElementById('juegoId').value.trim();
+      const resultadoDiv = document.getElementById('resultado');
+
+      if (!id) {
+        resultadoDiv.innerHTML = `<p class="error">Por favor ingrese un ID válido.</p>`;
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/juegos/search/${id}`);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al buscar el juego.');
+        }
+
+        const juego = await response.json();
+
+        resultadoDiv.innerHTML = `
+          <h3>Detalles del Juego</h3>
+          <p><strong>ID:</strong> ${juego._id}</p>
+          <p><strong>Nombre:</strong> ${juego.nombre}</p>
+          <p><strong>Descripción:</strong> ${juego.descripcion}</p>
+          <p><strong>Consola:</strong> ${juego.consola}</p>
+          <p><strong>Año de Lanzamiento:</strong> ${juego.anioLanzamiento}</p>
+          <p><strong>Número de Jugadores:</strong> ${juego.numeroJugadores}</p>
+          <img src="${juego.imagen}" alt="${juego.nombre}" width="150" />
+        `;
+      } catch (error) {
+        console.error(error);
+        resultadoDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

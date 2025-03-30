@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Best Games</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.8em;
+    }
+
+    p {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #333;
+    }
+
+    main {
+      margin: 20px;
+    }
+
+    nav button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      background-color: #0056b3;
+    }
+
+    section {
+      margin-top: 40px;
+    }
+
+    .game-card {
+      background-color: white;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: 10px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 10px;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    button.card-button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button.card-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>The Best Games</h1>
+  </header>
+  
+  <main>
+    <p>En esta web, encontrarás un registro con un poco de los juegos que han dejado huella y los más destacados en el mundo de los internautas y entusiastas gamers, desde los inicios en cuanto a juegos 2d asi como las primeras consolas hasta los juegos más actuales y que ya se encuentran en tercera dimensión que con el pasar de los años nos ofrecen una experiencia más dinamica y personalizada asi como muy cercanos a la realidad, aqui vas a poder revisar el top 5 de destacados seleccionados por ser los mejores de su año y tambien vas a poder agregar detalles de alguno nuevo o editarlo que ¡disfrutes tu estadia!. 🚀</p>
+    
+    <nav>
+      <button onclick="window.location.href='create.html'">Crear Juego</button>
+      <button onclick="window.location.href='list.html'">Listar Juegos</button>
+      <button onclick="window.location.href='update.html'">Actualizar Juego</button>
+      <button onclick="window.location.href='delete.html'">Eliminar Juego</button>
+      <button onclick="window.location.href='search.html'">Buscar Juego por ID</button>
+    </nav>
+
+    <!-- Sección de Juegos Destacados -->
+    <section id="juegosDestacados">
+      <h2>🎮 Juegos Destacados</h2>
+      
+      <!-- The Legend of Zelda -->
+      <div class="game-card">
+        <img src="https://media.vandal.net/i/1200x900/5-2023/20235101754480_1.jpg" alt="The Legend of Zelda: Breath of the Wild">
+        <h3>The Legend of Zelda: Breath of the Wild</h3>
+        <p><strong>Consola:</strong> Nintendo Switch</p>
+        <p><strong>Año:</strong> 2017</p>
+        <button class="card-button" onclick="window.location.href='/juegos/detalle/67e8398e292c553e787238b7'">Ver Más</button>
+      </div>
+
+      <!-- Grand Theft Auto V -->
+      <div class="game-card">
+        <img src="https://gamestorecolombia.com/files/images/productos/1713304269-grand-theft-auto-vi-ps5-pre-orden-0.webp" alt="Grand Theft Auto V">
+        <h3>Grand Theft Auto V</h3>
+        <p><strong>Consola:</strong> PS4, PS5, Xbox, PC</p>
+        <p><strong>Año:</strong> 2013</p>
+        <button class="card-button" onclick="window.location.href='/juegos/detalle/67e83aaa292c553e787238c0'">Ver Más</button>
+      </div>
+
+      <!-- Red Dead Redemption 2 -->
+      <div class="game-card">
+        <img src="https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png" alt="Red Dead Redemption 2">
+        <h3>Red Dead Redemption 2</h3>
+        <p><strong>Consola:</strong> PS4, Xbox One, PC</p>
+        <p><strong>Año:</strong> 2018</p>
+        <button class="card-button" onclick="window.location.href='/juegos/detalle/67e84194292c553e787238cc'">Ver Más</button>
+      </div>
+
+      <!-- League of Legends -->
+      <div class="game-card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjcVCFtc6gJR1GzhSkODo8S4Vy4iSVcUj1KQ&s" alt="League of Legends">
+        <h3>League of Legends</h3>
+        <p><strong>Consola:</strong> PC</p>
+        <p><strong>Año:</strong> 2009</p>
+        <button class="card-button" onclick="window.location.href='/juegos/detalle/67e84514292c553e787238e4'">Ver Más</button>
+      </div>
+
+      <!-- Minecraft -->
+      <div class="game-card">
+        <img src="https://i.blogs.es/8bddcc/650_1000_650_1000_minecraft/450_1000.jpg" alt="Minecraft">
+        <h3>Minecraft</h3>
+        <p><strong>Consola:</strong> Varias Plataformas</p>
+        <p><strong>Año:</strong> 2011</p>
+        <button class="card-button" onclick="window.location.href='/juegos/detalle/67e841fd292c553e787238ce'">Ver Más</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listar Juegos</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Lista de Juegos</h1>
+    <a href="index.html">Volver al Inicio</a>
+  </header>
+
+  <main>
+    <h2>Juegos Registrados</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Consola</th>
+          <th>Año de Lanzamiento</th>
+          <th>Número de Jugadores</th>
+          <th>Imagen</th>
+        </tr>
+      </thead>
+      <tbody id="juegos-list">
+        <tr>
+          <td colspan="7">Cargando juegos...</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('http://localhost:3000/juegos/list');
+        if (!response.ok) {
+          throw new Error('Error al obtener los juegos');
+        }
+
+        const juegos = await response.json();
+        const tabla = document.getElementById('juegos-list');
+        tabla.innerHTML = ''; // Limpiar tabla
+
+        if (juegos.length === 0) {
+          tabla.innerHTML = '<tr><td colspan="7">No hay juegos registrados.</td></tr>';
+        } else {
+          juegos.forEach(juego => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+              <td>${juego._id}</td>
+              <td>${juego.nombre}</td>
+              <td>${juego.descripcion}</td>
+              <td>${juego.consola}</td>
+              <td>${juego.anioLanzamiento}</td>
+              <td>${juego.numeroJugadores}</td>
+              <td><img src="${juego.imagen}" alt="Imagen de ${juego.nombre}" width="100"></td>
+            `;
+            tabla.appendChild(fila);
+          });
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('juegos-list').innerHTML = '<tr><td colspan="7">Error al cargar los juegos</td></tr>';
+      }
+    });
+  </script>
+</body>
+</html>

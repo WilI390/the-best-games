@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eliminar Juego</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    main {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 80%;
+      max-width: 500px;
+    }
+
+    input, button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #dc3545;
+      color: white;
+      cursor: pointer;
+      border: none;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #c82333;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #mensaje {
+      text-align: left;
+      background-color: #e9f7ef;
+      border-left: 4px solid #28a745;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .error {
+      color: red;
+      background-color: #fdecea;
+      border-left: 4px solid #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Eliminar Juego</h1>
+    <a href="index.html">Volver al Inicio</a>
+
+    <h2>Ingrese el ID del Juego para Eliminar</h2>
+    <input type="text" id="juegoId" placeholder="Ingrese el ID del Juego" />
+    <button onclick="confirmarEliminacion()">Eliminar Juego</button>
+
+    <div id="mensaje"></div>
+  </main>
+
+  <script>
+    function confirmarEliminacion() {
+      const id = document.getElementById('juegoId').value.trim();
+      const mensajeDiv = document.getElementById('mensaje');
+
+      if (!id) {
+        mensajeDiv.innerHTML = `<p class="error">Por favor ingrese un ID válido.</p>`;
+        return;
+      }
+
+      const confirmacion = confirm(`¿Estás seguro de que deseas eliminar el juego con ID: ${id}?`);
+      
+      if (confirmacion) {
+        eliminarJuego(id);
+      } else {
+        mensajeDiv.innerHTML = `<p style="color: orange;">Eliminación cancelada.</p>`;
+      }
+    }
+
+    async function eliminarJuego(id) {
+      try {
+        const response = await fetch(`http://localhost:3000/juegos/delete/${id}`, {
+          method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById('mensaje').innerHTML = `<p>${result.message}</p>`;
+        } else {
+          throw new Error(result.error || 'Error al eliminar el juego.');
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('mensaje').innerHTML = `<p class="error">Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

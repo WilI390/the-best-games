@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Juego</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Crear un Nuevo Juego</h1>
+    <a href="/">Volver al Inicio</a>
+  </header>
+
+  <main>
+    <form id="createForm">
+      <label for="nombre">Nombre del Juego:</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" name="descripcion" required></textarea>
+
+      <label for="consola">Consola:</label>
+      <input type="text" id="consola" name="consola" required />
+
+      <label for="anioLanzamiento">Año de Lanzamiento:</label>
+      <input type="number" id="anioLanzamiento" name="anioLanzamiento" required min="1950" max="2025" />
+
+      <label for="numeroJugadores">Número de Jugadores:</label>
+      <input type="number" id="numeroJugadores" name="numeroJugadores" required min="1" />
+
+      <label for="imagen">URL de la Imagen:</label>
+      <input type="url" id="imagen" name="imagen" />
+
+      <button type="submit">Crear Juego</button>
+    </form>
+
+    <div id="mensaje"></div>
+  </main>
+
+  <script>
+    document.getElementById('createForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = {
+    nombre: document.getElementById('nombre').value,
+    descripcion: document.getElementById('descripcion').value,
+    consola: document.getElementById('consola').value,
+    anioLanzamiento: document.getElementById('anioLanzamiento').value,
+    numeroJugadores: document.getElementById('numeroJugadores').value,
+    imagen: document.getElementById('imagen').value
+  };
+
+  try {
+    const response = await fetch('http://localhost:3000/juegos/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+    console.log('Respuesta del Servidor:', result);
+
+    if (response.ok) {
+      document.getElementById('mensaje').innerHTML = `<p style="color: green;">
+        ${result.message}<br>
+        ID del Juego: <strong>${result.juego ? result.juego._id : 'No disponible'}</strong>
+      </p>`;
+      document.getElementById('createForm').reset();
+    } else {
+      document.getElementById('mensaje').innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+    }
+  } catch (error) {
+    console.error('Error en la conexión:', error);
+    document.getElementById('mensaje').innerHTML = `<p style="color: red;">Error en la conexión</p>`;
+  }
+});
+
+  </script>
+</body>
+</html>

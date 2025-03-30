@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actualizar Juego</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    main {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    input, button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      border: none;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #resultado p, #mensaje {
+      text-align: left;
+      background-color: #e9f7ef;
+      border-left: 4px solid #28a745;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .error {
+      color: red;
+      background-color: #fdecea;
+      border-left: 4px solid #dc3545;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    form input {
+      width: 95%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    #gameId {
+      font-weight: bold;
+      color: #007bff;
+      word-break: break-word; /* Evitar desbordamiento */
+    }
+
+    button {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Actualizar Juego</h1>
+    <a href="index.html">Volver al Inicio</a>
+
+    <h2>Ingrese el ID del Juego</h2>
+    <input type="text" id="juegoId" placeholder="Ingrese el ID del Juego" />
+    <button onclick="buscarJuego()">Buscar Juego</button>
+    
+    <div id="resultado"></div>
+
+    <form id="updateForm" style="display: none;">
+      <h3>Detalles del Juego</h3>
+      <p><strong>ID:</strong> <span id="gameId"></span></p>
+      
+      <label>Nombre:</label>
+      <input type="text" id="nombre" />
+      
+      <label>Descripción:</label>
+      <input type="text" id="descripcion" />
+      
+      <label>Consola:</label>
+      <input type="text" id="consola" />
+      
+      <label>Año de Lanzamiento:</label>
+      <input type="number" id="anioLanzamiento" />
+      
+      <label>Número de Jugadores:</label>
+      <input type="number" id="numeroJugadores" />
+      
+      <label>Imagen (URL):</label>
+      <input type="text" id="imagen" />
+      
+      <button type="button" onclick="actualizarJuego()">Actualizar Juego</button>
+    </form>
+
+    <div id="mensaje"></div>
+  </main>
+
+  <script>
+    async function buscarJuego() {
+      const id = document.getElementById('juegoId').value.trim();
+      const resultadoDiv = document.getElementById('resultado');
+      const form = document.getElementById('updateForm');
+      const mensaje = document.getElementById('mensaje');
+
+      if (!id) {
+        resultadoDiv.innerHTML = `<p class="error">Por favor ingrese un ID válido.</p>`;
+        form.style.display = 'none';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/juegos/search/${id}`);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al buscar el juego.');
+        }
+
+        const juego = await response.json();
+
+        // Mostrar los detalles del juego
+        document.getElementById('gameId').textContent = juego._id;
+        document.getElementById('nombre').value = juego.nombre;
+        document.getElementById('descripcion').value = juego.descripcion;
+        document.getElementById('consola').value = juego.consola;
+        document.getElementById('anioLanzamiento').value = juego.anioLanzamiento;
+        document.getElementById('numeroJugadores').value = juego.numeroJugadores;
+        document.getElementById('imagen').value = juego.imagen;
+
+        resultadoDiv.innerHTML = `<p>Juego encontrado con éxito. Puede proceder a actualizarlo.</p>`;
+        form.style.display = 'block';
+      } catch (error) {
+        console.error(error);
+        resultadoDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+        form.style.display = 'none';
+      }
+    }
+
+    async function actualizarJuego() {
+      const id = document.getElementById('juegoId').value;
+      const formData = {
+        nombre: document.getElementById('nombre').value,
+        descripcion: document.getElementById('descripcion').value,
+        consola: document.getElementById('consola').value,
+        anioLanzamiento: document.getElementById('anioLanzamiento').value,
+        numeroJugadores: document.getElementById('numeroJugadores').value,
+        imagen: document.getElementById('imagen').value
+      };
+
+      try {
+        const response = await fetch(`http://localhost:3000/juegos/update/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById('mensaje').innerHTML = `<p>${result.message}</p>`;
+        } else {
+          throw new Error(result.error || 'Error al actualizar el juego.');
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('mensaje').innerHTML = `<p class="error">Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
